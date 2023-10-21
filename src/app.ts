@@ -13,6 +13,6 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 app.use(router);
-dbConnect().then(() => console.log('Coneccion is running'))
+dbConnect().then(() => console.log('Coneccion to DB running'))
 
 app.listen(PORT, ()=>console.log(`app listening on ${PORT}`))

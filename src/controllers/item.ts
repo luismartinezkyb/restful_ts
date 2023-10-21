@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { handleHttpError } from "../utils/errors.handle";
 
-import { insertCar, getCars, getCar } from "../services/item";
+import { insertCar, getCars, getCar, updateCar, deleteCar } from "../services/item";
 
 const getItem = async(req:Request, res:Response)=>{
   try{
     const data = await getCar(req.params.id);
-    console.log("data",data)
     if(!data) {
       return handleHttpError(res, 'Car not found');
     }
@@ -34,19 +33,26 @@ const postItem = async({body}:Request, res:Response)=>{
     handleHttpError(res, "ERROR_postItem", e);
   }
 }
-const updateItem = (req:Request, res:Response)=>{
+const updateItem = async({params,body}:Request, res:Response)=>{
   try{
-
-  }catch(e){
+    const {id} = params;
+    const responseItem = await updateCar(id, body);
+    res.json(responseItem)
     
+  }catch(e){
     handleHttpError(res, "ERROR_updateItems");
   }
 }
-const deleteItem = (req:Request, res:Response)=>{
+const deleteItem = async({params}:Request, res:Response)=>{
   try{
-
+    const {id} = params;
+    const data = await getCar(id);
+    if(!data) {
+      return handleHttpError(res, 'Car not found');
+    }
+    const responseItem = await deleteCar(id);
+    res.status(200).json(responseItem)
   }catch(e){
-    
     handleHttpError(res, "ERROR_deleteItem");
   }
 }
